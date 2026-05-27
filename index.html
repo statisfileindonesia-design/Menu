@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>clicks • Nonton Film</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; background: #000; overflow-x: hidden; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #fff; }
+
+        /* HALAMAN UTAMA */
+        .app-bar { flex-shrink: 0; background: #0a0a0a; padding: 10px 16px; border-bottom: 2px solid #e50914; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
+        .logo { font-family: 'Press Start 2P', cursive; font-size: 20px; color: #e50914; text-shadow: 0 0 10px rgba(229,9,20,0.7); letter-spacing: 2px; }
+        .search-logo-btn {
+            background: linear-gradient(135deg, #e50914, #b0070f);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+        .search-logo-btn:active { transform: scale(0.92); }
+        .banner-link { display: block; width: 100%; line-height: 0; }
+        .banner-link img { width: 100%; height: auto; display: block; }
+        .main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px; height: calc(100vh - 110px); }
+        .status-bar { padding: 8px 0; font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #e50914; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+        .movie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding-bottom: 20px; }
+        .movie-card { background: #111; border-radius: 10px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; border: 2px solid rgba(255,215,0,0.2); transition: transform 0.1s; }
+        .movie-card:active { transform: scale(0.96); }
+        .thumb { position: relative; width: 100%; padding-bottom: 150%; background: #1a1a1a; overflow: hidden; }
+        .thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .thumb-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 30px; opacity: 0.4; }
+        .movie-title { padding: 10px 6px; font-size: 11px; font-weight: 500; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #0d0d0d; }
+        footer { text-align: center; font-size: 9px; color: #444; padding: 20px 0 30px; }
+
+        /* HALAMAN SINOPSIS (overlay) */
+        .sinopsis-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 200;
+            overflow-y: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sinopsis-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .cover-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            filter: brightness(0.5) blur(2px);
+            transform: scale(1.02);
+        }
+        .overlay-grad {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 40%, rgba(0,0,0,0.65), rgba(0,0,0,0.85));
+            z-index: 1;
+        }
+        .sinopsis-content {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px 80px;
+            text-align: center;
+        }
+        .film-title {
+            font-size: 2.3rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #FFD966, #E50914, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .sinopsis-card {
+            max-width: 720px;
+            width: 90%;
+            background: rgba(20,20,30,0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 24px 28px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255,215,0,0.5);
+            animation: goldBorderPulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .sinopsis-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(115deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0) 35%, rgba(255,215,0,0.15) 45%, rgba(255,215,0,0.3) 50%, rgba(255,215,0,0.15) 55%, rgba(255,215,0,0) 65%, rgba(255,215,0,0) 100%);
+            transform: rotate(25deg);
+            animation: shimmerGold 3s infinite linear;
+            pointer-events: none;
+            border-radius: 48px;
+        }
+        @keyframes shimmerGold {
+            0% { transform: rotate(25deg) translateX(-100%); }
+            100% { transform: rotate(25deg) translateX(100%); }
+        }
+        @keyframes goldBorderPulse {
+            0% { border-color: rgba(255,215,0,0.4); }
+            50% { border-color: rgba(255,215,0,1); }
+            100% { border-color: rgba(255,215,0,0.4); }
+        }
+        .sinopsis-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: justify;
+            color: #f0f0f0;
+            position: relative;
+            z-index: 1;
+        }
+        .sinopsis-img {
+            max-width: 100%;
+            border-radius: 24px;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #E50914, #B0070F);
+            border: none;
+            color: white;
+            padding: 12px 38px;
+            border-radius: 60px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.2s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .play-btn:active { transform: scale(0.96); animation: none; }
+        .back-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.2); }
+
+        @media (max-width: 600px) {
+            .film-title { font-size: 1.7rem; }
+            .sinopsis-card { padding: 18px 20px; }
+            .play-btn { padding: 10px 28px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HALAMAN UTAMA -->
+    <div id="mainPage">
+        <div class="app-bar">
+            <div class="logo">CLICKS</div>
+            <button class="search-logo-btn" id="searchLogoBtn">🔍</button>
+        </div>
+        <a href="https://www.facebook.com/profile.php?id=61560222545325" class="banner-link" target="_blank">
+            <img src="https://images2.imgbox.com/33/38/RPYS32UR_o.jpg" alt="Promosi">
+        </a>
+        <div class="main" id="scrollContainer">
+            <div class="status-bar">
+                <div class="dot"></div>
+                <span id="statusText">Menghubungkan ke server...</span>
+            </div>
+            <div id="movieGrid" class="movie-grid"></div>
+            <footer>clicks • streaming online</footer>
+        </div>
+    </div>
+
+    <!-- HALAMAN SINOPSIS (OVERLAY) -->
+    <div id="sinopsisOverlay" class="sinopsis-overlay">
+        <div id="coverBg" class="cover-bg"></div>
+        <div class="overlay-grad"></div>
+        <div class="sinopsis-content">
+            <h1 class="film-title" id="filmTitle">Memuat...</h1>
+            <div class="sinopsis-card" id="sinopsisCard"></div>
+            <button class="play-btn" id="playButton">▶ TONTON SEKARANG</button>
+            <button class="back-btn" id="backButton">← Kembali ke Daftar Film</button>
+        </div>
+    </div>
+
+<script>
+(function() {
+    const BASE_URL = 'https://cdn.jsdelivr.net/gh/statisfileindonesia-design';
+    const KEY = '25041995';
+    const REPOS = [
+        'THAI','RUSIA','MALAY','WAR_','HORROR','SKI_FY','KOMEDI',
+        'AMERIKA','KARTUN','INDONESIA_II','CHINA','INDONESIA_1','INDIA','ANIME'
+    ];
+
+    let allMovies = [];
+    let currentMovie = null;
+
+    const movieGrid = document.getElementById('movieGrid');
+    const statusText = document.getElementById('statusText');
+    const sinopsisOverlay = document.getElementById('sinopsisOverlay');
+
+    // Tombol search logo
+    document.getElementById('searchLogoBtn').onclick = () => {
+        window.open('https://89586a29.kacung-mkd.pages.dev/', '_blank');
+    };
+
+    // Tombol kembali
+    document.getElementById('backButton').onclick = () => {
+        sinopsisOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        currentMovie = null;
+    };
+
+    function xorDecrypt(b64, key) {
+        if (!b64) return '';
+        try {
+            const bin = atob(b64);
+            let res = '';
+            for (let i = 0; i < bin.length; i++) {
+                res += String.fromCharCode(bin.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return res;
+        } catch(e) { return ''; }
+    }
+
+    function escapeHtml(s) {
+        if (!s) return '';
+        return s.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]);
+    }
+
+    async function fetchRepo(repoId, retries = 2) {
+        for (let attempt = 0; attempt < retries; attempt++) {
+            const url = `${BASE_URL}/${repoId}@main/database.json?t=${Date.now()}`;
+            try {
+                const res = await fetch(url, { cache: 'no-cache' });
+                if (!res.ok) continue;
+                const json = await res.json();
+                const movies = json.data || json.movies || json;
+                if (!Array.isArray(movies)) continue;
+                return movies;
+            } catch(e) {}
+            await new Promise(r => setTimeout(r, 500));
+        }
+        return [];
+    }
+
+    function decryptMovie(raw) {
+        const title = xorDecrypt(raw.NAME || raw.NAMAE || '', KEY) || 'Tanpa Judul';
+        const cover = xorDecrypt(raw.COVER || '', KEY);
+        const sinopsis = xorDecrypt(raw.SINOPSIS || '', KEY);
+        const link = xorDecrypt(raw.LINK || '', KEY);
+        if (!link) return null;
+        return { title, cover: cover || '', sinopsis: sinopsis || '', link };
+    }
+
+    async function loadAllData() {
+        statusText.textContent = 'Mengambil database...';
+        
+        for (let repo of REPOS) {
+            statusText.textContent = `Memuat: ${repo}...`;
+            const raw = await fetchRepo(repo);
+            if (raw.length === 0) continue;
+            
+            const decrypted = raw.map(decryptMovie).filter(m => m !== null);
+            allMovies.push(...decrypted);
+            await new Promise(r => setTimeout(r, 50));
+        }
+        
+        if (allMovies.length === 0) {
+            statusText.textContent = '❌ Gagal memuat film. Cek koneksi.';
+            return;
+        }
+        
+        statusText.textContent = `✅ ${allMovies.length} film siap ditonton`;
+        document.querySelector('.dot').style.display = 'none';
+        
+        renderAllMovies(allMovies);
+    }
+
+    function renderAllMovies(movies) {
+        movieGrid.innerHTML = '';
+        
+        for (let movie of movies) {
+            const card = document.createElement('div');
+            card.className = 'movie-card';
+            card.onclick = () => showSinopsis(movie);
+            
+            let thumbHtml = '<span class="thumb-placeholder">🎬</span>';
+            if (movie.cover && movie.cover.match(/^https?:\/\//)) {
+                thumbHtml = `<img class="thumb-img" src="${escapeHtml(movie.cover)}" loading="lazy" onerror="this.outerHTML='<span class=thumb-placeholder>🎬</span>'">`;
+            }
+            card.innerHTML = `<div class="thumb">${thumbHtml}</div><div class="movie-title">${escapeHtml(movie.title)}</div>`;
+            movieGrid.appendChild(card);
+        }
+    }
+
+    function showSinopsis(movie) {
+        currentMovie = movie;
+        
+        // Set cover background
+        if (movie.cover && movie.cover.startsWith('http')) {
+            document.getElementById('coverBg').style.backgroundImage = `url('${escapeHtml(movie.cover)}')`;
+        } else {
+            document.getElementById('coverBg').style.backgroundImage = '';
+        }
+        
+        document.getElementById('filmTitle').textContent = movie.title;
+        
+        // Set sinopsis
+        const sinopsisDiv = document.getElementById('sinopsisCard');
+        const isImage = movie.sinopsis && (movie.sinopsis.startsWith('http://') || movie.sinopsis.startsWith('https://'));
+        if (isImage) {
+            sinopsisDiv.innerHTML = `<img class="sinopsis-img" src="${escapeHtml(movie.sinopsis)}" onerror="this.style.display='none'">`;
+        } else if (movie.sinopsis && movie.sinopsis.trim().length > 0) {
+            let html = '';
+            movie.sinopsis.split(/\n+/).forEach(p => {
+                if (p.trim()) html += `<p class="sinopsis-text" style="margin-bottom:14px;">${escapeHtml(p.trim())}</p>`;
+            });
+            sinopsisDiv.innerHTML = html;
+        } else {
+            sinopsisDiv.innerHTML = '<p class="sinopsis-text">Tidak ada sinopsis</p>';
+        }
+        
+        // Tombol play
+        const playBtn = document.getElementById('playButton');
+        const newPlayBtn = playBtn.cloneNode(true);
+        playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
+        newPlayBtn.id = 'playButton';
+        newPlayBtn.onclick = () => {
+            if (!currentMovie) return;
+            const link = currentMovie.link;
+            let videoId = '';
+            const match = link.match(/video\/(\d+)/);
+            if (match) videoId = match[1];
+            else {
+                const numMatch = link.match(/(\d{10,})/);
+                if (numMatch) videoId = numMatch[1];
+            }
+            if (videoId) {
+                window.open(`https://ok.ru/videoembed/${videoId}`, '_blank');
+            } else if (link) {
+                window.open(link, '_blank');
+            } else {
+                alert('Link video tidak tersedia');
+            }
+        };
+        
+        // Tampilkan overlay
+        sinopsisOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    loadAllData();
+})();
+</script>
+</body>
+</html>
