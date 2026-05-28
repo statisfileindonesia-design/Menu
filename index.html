@@ -13,8 +13,25 @@
     
     .app-bar { flex-shrink: 0; background: #0a0a0a; padding: 10px 16px; border-bottom: 2px solid #e50914; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
     .logo { font-family: 'Press Start 2P', cursive; font-size: 20px; color: #e50914; text-shadow: 0 0 10px rgba(229,9,20,0.7); letter-spacing: 2px; }
-    .search-logo-btn { background: linear-gradient(135deg, #e50914, #b0070f); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: transform 0.2s; color: white; }
+    
+    /* === SEARCH BUTTON - UPDATED === */
+    .search-logo-btn { 
+      background: linear-gradient(135deg, #e50914, #b0070f); 
+      border: none; 
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      transition: transform 0.2s; 
+      color: white; 
+      padding: 0;
+      flex-shrink: 0;
+    }
     .search-logo-btn:active { transform: scale(0.92); }
+    .search-logo-btn svg { width: 18px; height: 18px; stroke: currentColor; }
     
     .banner-link { display: block; width: 100%; line-height: 0; flex-shrink: 0; }
     .banner-link img { width: 100%; height: auto; display: block; }
@@ -31,26 +48,33 @@
     .thumb-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .thumb-placeholder { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 30px; opacity: 0.4; }
     .movie-title { padding: 10px 6px; font-size: 11px; font-weight: 500; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #0d0d0d; }
-
     .ad-row { grid-column: 1 / -1; margin: 10px 0; overflow: visible; }
     .ad-box { width: 728px; min-height: 90px; transform: scale(0.5); transform-origin: left center; line-height: 0; }
 
     footer { text-align: center; font-size: 9px; color: #444; padding: 20px 0 30px; flex-shrink: 0; }
 
+    /* === SINOPSIS OVERLAY === */
     .sinopsis-overlay { 
       position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 200; 
       overflow-y: auto; overflow-x: hidden;
-      display: none; opacity: 0; transition: opacity 0.3s ease; 
+      opacity: 0; visibility: hidden; 
+      transition: opacity 0.3s ease, visibility 0.3s ease; 
       -webkit-overflow-scrolling: touch; 
+      pointer-events: none;
     }
-    .sinopsis-overlay.active { display: block; opacity: 1; }
+    .sinopsis-overlay.active { 
+      opacity: 1; 
+      visibility: visible; 
+      pointer-events: auto;
+    }
+    
     .cover-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 0; filter: brightness(0.5) blur(2px); transform: scale(1.02); }
     .overlay-grad { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 20% 40%, rgba(0,0,0,0.65), rgba(0,0,0,0.85)); z-index: 1; }
     .sinopsis-content { 
       position: relative; z-index: 2; min-height: 100vh; 
-      display: flex; flex-direction: column; align-items: center;       padding: 60px 20px 80px; text-align: center; 
-      overflow-x: hidden;
-      width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 20px 80px; text-align: center; 
+      overflow-x: hidden; width: 100%;
     }
     .film-title { font-size: 2.3rem; font-weight: 800; margin-bottom: 24px; background: linear-gradient(135deg, #FFD966, #E50914, #FFB347); -webkit-background-clip: text; background-clip: text; color: transparent; max-width: 100%; word-break: break-word; }
     .sinopsis-card { 
@@ -67,107 +91,120 @@
     .play-btn { background: linear-gradient(135deg, #E50914, #B0070F); border: none; color: white; padding: 12px 38px; border-radius: 60px; font-size: 1.15rem; font-weight: bold; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; animation: heartbeat 1.2s infinite; }
     @keyframes heartbeat { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     .play-btn:active { transform: scale(0.96); animation: none; }
-    .back-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 10px 24px; border-radius: 40px; font-size: 14px; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
-    .back-btn:hover { background: rgba(255,255,255,0.2); }
+    
+    /* === BACK BUTTON === */
+    .back-btn { 
+      background: rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.3); 
+      color: #fff; 
+      padding: 10px 24px;       border-radius: 40px; 
+      font-size: 14px; 
+      cursor: pointer; 
+      margin-top: 10px; 
+      transition: all 0.2s;
+      position: relative;
+      z-index: 50;
+      pointer-events: auto;
+    }
+    .back-btn:active { 
+      background: rgba(255,255,255,0.2); 
+      transform: scale(0.98);
+    }
     
     .sinopsis-ad-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 20px 0;
-      max-width: 100%;
-      overflow: visible;
-      min-height: 50px;
+      display: flex; justify-content: center; align-items: center;
+      margin: 20px 0; max-width: 100%; overflow: visible; min-height: 50px;
+      pointer-events: none;
     }
     .sinopsis-ad-scaler {
-      transform: scale(0.5);
-      transform-origin: center center;
-      width: 728px;
-      max-width: 728px;
+      transform: scale(0.5); transform-origin: center center;
+      width: 728px; max-width: 728px; pointer-events: none;
     }
     .ad-sinopsis {
-      width: 728px;
-      min-height: 90px;
-      line-height: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 728px; min-height: 90px; line-height: 0;
+      display: flex; justify-content: center; align-items: center;
+      pointer-events: none;
+    }
+    .sinopsis-ad-wrapper iframe,
+    .sinopsis-ad-scaler iframe,
+    .ad-sinopsis iframe {
+      pointer-events: auto;
     }
 
-    /* PLAYER OVERLAY */
+    /* === PLAYER OVERLAY === */
     .player-overlay {
-      position: fixed;
-      top: 0;      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      z-index: 1000;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #000; z-index: 1000;
+      display: none; justify-content: center; align-items: center; flex-direction: column;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      pointer-events: none;
     }
-    .player-overlay.active {
-      display: flex;
+    .player-overlay.active { 
+      display: flex; 
+      opacity: 1; 
+      visibility: visible; 
+      pointer-events: auto;
     }
-    .player-container {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      position: relative;
-      z-index: 1001;
+    .player-container {      width: 100%; height: 100%; background: #000; position: relative; z-index: 1001;
     }
-    .player-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    .player-container iframe { width: 100%; height: 100%; border: none; }
+
+    /* === PLAYER BACK BUTTON === */
+    .player-back-btn {
+      position: fixed !important;
+      top: 12px !important;
+      left: 12px !important;
+      background: rgba(229, 9, 20, 0.95) !important;
+      border: 2px solid #ffd700 !important;
+      color: #fff !important;
+      padding: 10px 20px !important;
+      border-radius: 30px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      z-index: 10002 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+      transition: all 0.2s ease !important;
+      pointer-events: auto !important;
+      backdrop-filter: blur(8px) !important;
+    }
+    .player-back-btn:active {
+      transform: scale(0.96) !important;
+      background: rgba(176, 7, 15, 0.95) !important;
+    }
+    .player-back-btn svg {
+      width: 16px; height: 16px; fill: currentColor;
     }
 
-    /* FRAME BANNER - TINGGI BESARIN SEDIKIT */
+    /* FRAME BANNER */
     .player-ad-overlay {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100% !important;
-      height: 32px !important; /* Besarin dari 26px → 32px */
-      background: #000 !important;
-      z-index: 10000 !important;
-      display: none !important;
-      pointer-events: auto !important;
+      position: fixed !important; top: 0 !important; left: 0 !important;
+      width: 100% !important; height: 32px !important;
+      background: #000 !important; z-index: 10000 !important;
+      display: none !important; pointer-events: auto !important;
       overflow: hidden !important;
     }
-    .player-ad-overlay.show {
-      display: flex !important;
-      justify-content: center;
-      align-items: center;
-    }
-    .player-ad-frame {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0;      background: #000;
-    }
+    .player-ad-overlay.show { display: flex !important; justify-content: center; align-items: center; }
+    .player-ad-frame { width: 100%; display: flex; justify-content: center; align-items: center; padding: 0; background: #000; }
     #playerAdContainer {
-      width: 728px !important;
-      height: 90px !important;
-      transform: scale(0.25);
-      transform-origin: center center;
-      background: #000;
+      width: 728px !important; height: 90px !important;
+      transform: scale(0.25); transform-origin: center center; background: #000;
     }
-    #playerAdContainer iframe {
-      width: 728px !important;
-      height: 90px !important;
-      border: none;
-      display: block;
-    }
-
+    #playerAdContainer iframe { width: 728px !important; height: 90px !important; border: none; display: block; }
     @media (max-width: 600px) {
       .film-title { font-size: 1.7rem; }
       .sinopsis-card { padding: 18px 20px; }
       .play-btn { padding: 10px 28px; font-size: 1rem; }
-      .player-ad-overlay { height: 26px !important; } /* Besarin dari 20px → 26px */
+      .player-ad-overlay { height: 26px !important; }
       #playerAdContainer { transform: scale(0.2); }
+      .player-back-btn {
+        top: 8px !important; left: 8px !important;
+        padding: 8px 16px !important; font-size: 12px !important;
+      }
     }
   </style>
 </head>
@@ -175,7 +212,12 @@
 <div id="mainPage" style="display: flex; flex-direction: column; height: 100%;">
   <div class="app-bar">
     <div class="logo">CLICKS</div>
-    <button class="search-logo-btn" id="searchLogoBtn"></button>
+    <button class="search-logo-btn" id="searchLogoBtn" aria-label="Cari">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
   </div>
   <a href="https://m.facebook.com/profile.php?id=61560222545325&name=xhp_nt__fb__action__open_user" class="banner-link" target="_blank">
     <img src="https://images2.imgbox.com/46/42/SOY3vuDd_o.png" alt="Promosi">
@@ -195,14 +237,14 @@
 <div id="sinopsisOverlay" class="sinopsis-overlay">
   <div id="coverBg" class="cover-bg"></div>
   <div class="overlay-grad"></div>
-  <div class="sinopsis-content">    <h1 class="film-title" id="filmTitle">Memuat...</h1>
+  <div class="sinopsis-content">
+    <h1 class="film-title" id="filmTitle">Memuat...</h1>
     <div class="sinopsis-card" id="sinopsisCard"></div>
     
     <div class="sinopsis-ad-wrapper">
       <div class="sinopsis-ad-scaler">
         <div class="ad-sinopsis" id="adSinopsisContainer"></div>
-      </div>
-    </div>
+      </div>    </div>
     
     <button class="play-btn" id="playButton">▶ TONTON SEKARANG</button>
     <button class="back-btn" id="backButton">← Kembali</button>
@@ -211,6 +253,12 @@
 
 <!-- PLAYER FULLSCREEN OVERLAY -->
 <div id="playerOverlay" class="player-overlay">
+  <!-- BACK BUTTON PLAYER -->
+  <button class="player-back-btn" id="playerBackBtn">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    KELUAR
+  </button>
+  
   <!-- BANNER TIMPA VK -->
   <div id="playerAdOverlay" class="player-ad-overlay">
     <div class="player-ad-frame">
@@ -234,6 +282,7 @@
     let renderedCount = 0;
     const BATCH_SIZE = 3; 
     let isLoading = false;
+    let playerState = { active: false, videoUrl: null };
 
     const AD_KEYS = [
       '13a3cad66c890f8738d7259ea7640c6b',
@@ -250,13 +299,58 @@
     const videoIframe = document.getElementById('videoIframe');
     const playerAdOverlay = document.getElementById('playerAdOverlay');
     const playerAdContainer = document.getElementById('playerAdContainer');
+    const backButton = document.getElementById('backButton');
+    const playerBackBtn = document.getElementById('playerBackBtn');
 
+    // Search button functionality
     document.getElementById('searchLogoBtn').onclick = () => window.open('https://89586a29.kacung-mkd.pages.dev/', '_blank');
-    document.getElementById('backButton').onclick = () => {
-      sinopsisOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-      currentMovie = null;
-    };
+    
+    // === SINOPSIS BACK BUTTON ===
+    backButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closeSinopsis();
+    }, { passive: false });
+
+    // === PLAYER BACK BUTTON ===
+    playerBackBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closePlayer();
+    }, { passive: false });
+
+    // === BROWSER BACK BUTTON SUPPORT ===
+    window.addEventListener('popstate', function(e) {
+      if (playerState.active) {
+        e.preventDefault();
+        closePlayer();
+        if (currentMovie && sinopsisOverlay.classList.contains('active')) {
+          window.history.pushState({sinopsis: true}, '', '#sinopsis');
+        }
+      } else if (sinopsisOverlay.classList.contains('active')) {
+        e.preventDefault();
+        closeSinopsis();
+      }
+    });
+
+    function closeSinopsis() {
+      try {
+        sinopsisOverlay.classList.remove('active');
+        setTimeout(() => {
+          document.body.style.overflow = '';
+          currentMovie = null;
+          if (window.location.hash === '#sinopsis') {
+            window.history.replaceState(null, '', location.pathname);
+          }
+        }, 300);      } catch(err) {
+        console.error('Close sinopsis error:', err);
+        sinopsisOverlay.style.opacity = '0';
+        sinopsisOverlay.style.visibility = 'hidden';
+        sinopsisOverlay.style.pointerEvents = 'none';
+        document.body.style.overflow = '';
+        currentMovie = null;
+      }
+    }
 
     // ========== BANNER SINOPSIS ==========
     function loadSinopsisAd(){
@@ -293,11 +387,11 @@
         'params': {}
       };
       
-      const script = document.createElement('script');      script.src = `https://www.highperformanceformat.com/${adKey}/invoke.js`;
+      const script = document.createElement('script');
+      script.src = `https://www.highperformanceformat.com/${adKey}/invoke.js`;
       script.async = true;
       playerAdContainer.appendChild(script);
-      
-      playerAdOverlay.classList.add('show');
+            playerAdOverlay.classList.add('show');
       
       setTimeout(() => {
         if (playerAdContainer.innerHTML === '' || !playerAdContainer.querySelector('iframe')) {
@@ -319,17 +413,23 @@
     }
 
     function closePlayer() {
+      playerState.active = false;
       playerOverlay.classList.remove('active');
-      videoIframe.src = '';
+      if (videoIframe) videoIframe.src = '';
       hidePlayerAd();
       document.body.style.overflow = '';
+      if (window.location.hash === '#player') {
+        window.history.replaceState(null, '', location.pathname);
+      }
+      if (currentMovie && !sinopsisOverlay.classList.contains('active')) {
+        setTimeout(() => showSinopsis(currentMovie), 350);
+      }
     }
 
     playerOverlay.onclick = function(e) {
-      if (e.target === playerOverlay) {
-        closePlayer();
-      }
+      if (e.target === playerOverlay) closePlayer();
     };
+    document.getElementById('playerContainer').onclick = function(e) { e.stopPropagation(); };
 
     // ========== FUNGSI UTILITAS ==========
     function xorDecrypt(b64, key) {
@@ -340,9 +440,9 @@
         for (let i = 0; i < bin.length; i++) res += String.fromCharCode(bin.charCodeAt(i) ^ key.charCodeAt(i % key.length));
         return res;
       } catch(e) { return ''; }
-    }
-    function escapeHtml(s) {
-      if (!s) return '';      return s.replace(/[&<>]/g, m => ({ '&': '&', '<': '<', '>': '>' })[m]);
+    }    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/[&<>]/g, m => ({ '&': '&', '<': '<', '>': '>' })[m]);
     }
 
     async function fetchRepo(repoId) {
@@ -389,9 +489,9 @@
         
         let thumbHtml = '<span class="thumb-placeholder"></span>';
         if (movie.cover && movie.cover.match(/^https?:\/\//)) {
-          thumbHtml = `<img class="thumb-img" src="${escapeHtml(movie.cover)}" loading="lazy" onerror="this.outerHTML='<span class=thumb-placeholder></span>'">`;
-        }
-        card.innerHTML = `<div class="thumb">${thumbHtml}</div><div class="movie-title">${escapeHtml(movie.title)}</div>`;        movieGrid.appendChild(card);
+          thumbHtml = `<img class="thumb-img" src="${escapeHtml(movie.cover)}" loading="lazy" onerror="this.outerHTML='<span class=thumb-placeholder></span>'">`;        }
+        card.innerHTML = `<div class="thumb">${thumbHtml}</div><div class="movie-title">${escapeHtml(movie.title)}</div>`;
+        movieGrid.appendChild(card);
         
         if ((i + 1 - renderedCount) === 3 && i + 1 < allMovies.length) {
           const row = document.createElement('div');
@@ -438,9 +538,9 @@
 
         allMovies.sort(() => Math.random() - 0.5);
 
-        if (allMovies.length === 0) {
-          statusText.textContent = '❌ Gagal memuat data.';
-          return;        }
+        if (allMovies.length === 0) {          statusText.textContent = '❌ Gagal memuat data.';
+          return;
+        }
 
         statusText.textContent = `✅ ${allMovies.length} film siap`;
         document.querySelector('.dot').style.display = 'none';
@@ -466,13 +566,17 @@
     }
 
     function openPlayer(videoUrl) {
+      playerState.active = true;
+      playerState.videoUrl = videoUrl;
       videoIframe.src = videoUrl;
       playerOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
       
-      setTimeout(() => {
-        loadPlayerAd();
-      }, 200);
+      setTimeout(() => loadPlayerAd(), 200);
+      
+      if (window.history.pushState) {
+        window.history.pushState({player: true}, '', '#player');
+      }
       
       const container = document.getElementById('playerContainer');
       if (container.requestFullscreen) {
@@ -483,7 +587,6 @@
         container.msRequestFullscreen();
       }
     }
-
     function showSinopsis(movie) {
       try {
         currentMovie = movie;
@@ -512,6 +615,10 @@
           else alert('Link video tidak valid');
         };
 
+        if (window.history.pushState) {
+          window.history.pushState({sinopsis: true}, '', '#sinopsis');
+        }
+
         sinopsisOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
       } catch(e) {
@@ -519,10 +626,17 @@
       }
     }
 
+    // Handle escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (playerState.active) closePlayer();
+        else if (sinopsisOverlay.classList.contains('active')) closeSinopsis();
+      }
+    });
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', loadAllData);
-    } else {
-      loadAllData();
+    } else {      loadAllData();
     }
   })();
 </script>
