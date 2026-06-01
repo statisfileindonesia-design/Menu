@@ -14,7 +14,6 @@
     .app-bar { flex-shrink: 0; background: #0a0a0a; padding: 10px 16px; border-bottom: 2px solid #e50914; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
     .logo { font-family: 'Press Start 2P', cursive; font-size: 20px; color: #e50914; text-shadow: 0 0 10px rgba(229,9,20,0.7); letter-spacing: 2px; }
     
-    /* === SEARCH BUTTON - UPDATED === */
     .search-logo-btn { 
       background: linear-gradient(135deg, #e50914, #b0070f); 
       border: none; 
@@ -97,7 +96,8 @@
       background: rgba(255,255,255,0.1); 
       border: 1px solid rgba(255,255,255,0.3); 
       color: #fff; 
-      padding: 10px 24px;       border-radius: 40px; 
+      padding: 10px 24px;
+      border-radius: 40px; 
       font-size: 14px; 
       cursor: pointer; 
       margin-top: 10px; 
@@ -146,64 +146,114 @@
       visibility: visible; 
       pointer-events: auto;
     }
-    .player-container {      width: 100%; height: 100%; background: #000; position: relative; z-index: 1001;
+    .player-container {
+      width: 100%; height: 100%; background: #000; position: relative; z-index: 1001;
     }
     .player-container iframe { width: 100%; height: 100%; border: none; }
 
-    /* === PLAYER BACK BUTTON === */
+    /* === PLAYER BACK BUTTON (KANAN ATAS - DIKECILKAN) === */
     .player-back-btn {
       position: fixed !important;
-      top: 12px !important;
-      left: 12px !important;
-      background: rgba(229, 9, 20, 0.95) !important;
-      border: 2px solid #ffd700 !important;
+      top: 10px !important;
+      right: 10px !important;
+      background: rgba(229, 9, 20, 0.9) !important;
+      border: 1.5px solid #ffd700 !important;
       color: #fff !important;
-      padding: 10px 20px !important;
-      border-radius: 30px !important;
-      font-size: 13px !important;
+      padding: 6px 14px !important;
+      border-radius: 20px !important;
+      font-size: 11px !important;
       font-weight: 600 !important;
       cursor: pointer !important;
       z-index: 10002 !important;
       display: flex !important;
       align-items: center !important;
-      gap: 6px !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+      gap: 4px !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4) !important;
       transition: all 0.2s ease !important;
       pointer-events: auto !important;
       backdrop-filter: blur(8px) !important;
+      letter-spacing: 0.5px !important;
     }
     .player-back-btn:active {
-      transform: scale(0.96) !important;
+      transform: scale(0.94) !important;
       background: rgba(176, 7, 15, 0.95) !important;
     }
     .player-back-btn svg {
-      width: 16px; height: 16px; fill: currentColor;
+      width: 13px; height: 13px; fill: currentColor;
     }
 
-    /* FRAME BANNER */
-    .player-ad-overlay {
-      position: fixed !important; top: 0 !important; left: 0 !important;
-      width: 100% !important; height: 32px !important;
-      background: #000 !important; z-index: 10000 !important;
-      display: none !important; pointer-events: auto !important;
-      overflow: hidden !important;
+    /* === UNMUTE HELPER BUTTON === */
+    .unmute-helper {
+      position: fixed !important;
+      bottom: 80px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      background: linear-gradient(135deg, #E50914, #B0070F) !important;
+      color: white !important;
+      padding: 15px 30px !important;
+      border-radius: 30px !important;
+      border: 2px solid #ffd700 !important;
+      font-size: 16px !important;
+      font-weight: bold !important;
+      z-index: 10003 !important;
+      cursor: pointer !important;
+      display: none !important;
+      animation: unmutePulse 1.5s infinite !important;
+      box-shadow: 0 4px 20px rgba(229,9,20,0.5) !important;
     }
-    .player-ad-overlay.show { display: flex !important; justify-content: center; align-items: center; }
-    .player-ad-frame { width: 100%; display: flex; justify-content: center; align-items: center; padding: 0; background: #000; }
+    @keyframes unmutePulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(229,9,20,0.7); }
+      50% { box-shadow: 0 0 30px rgba(229,9,20,1); }
+    }
+
+    /* === BANNER IKLAN PLAYER (DIKIT DIBESARKAN) === */
+    .player-ad-banner {
+      position: fixed !important;
+      top: 0 !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 10001 !important;
+      display: none !important;
+      pointer-events: auto !important;
+      width: 728px !important;
+      height: 90px !important;
+    }
+    .player-ad-banner.show {
+      display: flex !important;
+      justify-content: center;
+      align-items: flex-start;
+    }
     #playerAdContainer {
-      width: 728px !important; height: 90px !important;
-      transform: scale(0.25); transform-origin: center center; background: #000;
+      width: 728px !important;
+      height: 90px !important;
+      transform: scale(0.45);
+      transform-origin: center top;
     }
-    #playerAdContainer iframe { width: 728px !important; height: 90px !important; border: none; display: block; }
+    #playerAdContainer iframe {
+      width: 728px !important;
+      height: 90px !important;
+      border: none;
+      display: block;
+    }
+
     @media (max-width: 600px) {
       .film-title { font-size: 1.7rem; }
       .sinopsis-card { padding: 18px 20px; }
       .play-btn { padding: 10px 28px; font-size: 1rem; }
-      .player-ad-overlay { height: 26px !important; }
-      #playerAdContainer { transform: scale(0.2); }
       .player-back-btn {
-        top: 8px !important; left: 8px !important;
-        padding: 8px 16px !important; font-size: 12px !important;
+        top: 8px !important;
+        right: 8px !important;
+        padding: 5px 12px !important;
+        font-size: 10px !important;
+      }
+      .player-back-btn svg {
+        width: 11px; height: 11px;
+      }
+      .player-ad-banner {
+        width: 100% !important;
+      }
+      #playerAdContainer {
+        transform: scale(0.35);
       }
     }
   </style>
@@ -244,7 +294,8 @@
     <div class="sinopsis-ad-wrapper">
       <div class="sinopsis-ad-scaler">
         <div class="ad-sinopsis" id="adSinopsisContainer"></div>
-      </div>    </div>
+      </div>
+    </div>
     
     <button class="play-btn" id="playButton">▶ TONTON SEKARANG</button>
     <button class="back-btn" id="backButton">← Kembali</button>
@@ -253,22 +304,25 @@
 
 <!-- PLAYER FULLSCREEN OVERLAY -->
 <div id="playerOverlay" class="player-overlay">
-  <!-- BACK BUTTON PLAYER -->
+  <!-- BANNER IKLAN TANPA BACKGROUND -->
+  <div class="player-ad-banner" id="playerAdBanner">
+    <div id="playerAdContainer"></div>
+  </div>
+
+  <!-- BACK BUTTON PLAYER (KANAN ATAS - KECIL) -->
   <button class="player-back-btn" id="playerBackBtn">
     <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     KELUAR
   </button>
   
-  <!-- BANNER TIMPA VK -->
-  <div id="playerAdOverlay" class="player-ad-overlay">
-    <div class="player-ad-frame">
-      <div id="playerAdContainer"></div>
-    </div>
+  <div class="player-container" id="playerContainer">
+    <iframe id="videoIframe" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe>
   </div>
   
-  <div class="player-container" id="playerContainer">
-    <iframe id="videoIframe" allow="autoplay; fullscreen" allowfullscreen></iframe>
-  </div>
+  <!-- UNMUTE HELPER BUTTON -->
+  <button class="unmute-helper" id="unmuteHelper">
+    🔊 TAP UNTUK AKTIFKAN SUARA & FULLSCREEN
+  </button>
 </div>
 
 <script>
@@ -293,14 +347,16 @@
 
     const movieGrid = document.getElementById('movieGrid');
     const statusText = document.getElementById('statusText');
-    const sinopsisOverlay = document.getElementById('sinopsisOverlay');    const scrollContainer = document.getElementById('scrollContainer');
+    const sinopsisOverlay = document.getElementById('sinopsisOverlay');
+    const scrollContainer = document.getElementById('scrollContainer');
     const sentinel = document.getElementById('scrollSentinel');
     const playerOverlay = document.getElementById('playerOverlay');
     const videoIframe = document.getElementById('videoIframe');
-    const playerAdOverlay = document.getElementById('playerAdOverlay');
+    const playerAdBanner = document.getElementById('playerAdBanner');
     const playerAdContainer = document.getElementById('playerAdContainer');
     const backButton = document.getElementById('backButton');
     const playerBackBtn = document.getElementById('playerBackBtn');
+    const unmuteHelper = document.getElementById('unmuteHelper');
 
     // Search button functionality
     document.getElementById('searchLogoBtn').onclick = () => window.open('https://89586a29.kacung-mkd.pages.dev/', '_blank');
@@ -317,6 +373,33 @@
       e.preventDefault();
       e.stopPropagation();
       closePlayer();
+    }, { passive: false });
+
+    // === UNMUTE HELPER BUTTON ===
+    unmuteHelper.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (videoIframe && videoIframe.src) {
+        const currentSrc = videoIframe.src;
+        videoIframe.src = '';
+        setTimeout(() => {
+          videoIframe.src = currentSrc;
+          
+          setTimeout(() => {
+            const container = document.getElementById('playerContainer');
+            if (container.requestFullscreen) {
+              container.requestFullscreen().catch(() => {});
+            } else if (container.webkitRequestFullscreen) {
+              container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) {
+              container.msRequestFullscreen();
+            }
+          }, 500);
+        }, 100);
+      }
+      
+      unmuteHelper.style.display = 'none';
     }, { passive: false });
 
     // === BROWSER BACK BUTTON SUPPORT ===
@@ -342,7 +425,8 @@
           if (window.location.hash === '#sinopsis') {
             window.history.replaceState(null, '', location.pathname);
           }
-        }, 300);      } catch(err) {
+        }, 300);
+      } catch(err) {
         console.error('Close sinopsis error:', err);
         sinopsisOverlay.style.opacity = '0';
         sinopsisOverlay.style.visibility = 'hidden';
@@ -372,7 +456,7 @@
       } catch(e) {}
     }
 
-    // ========== BANNER TIMPA VK ==========
+    // ========== BANNER IKLAN PLAYER ==========
     function loadPlayerAd() {
       if (!playerAdContainer) return;
       playerAdContainer.innerHTML = '';
@@ -391,7 +475,8 @@
       script.src = `https://www.highperformanceformat.com/${adKey}/invoke.js`;
       script.async = true;
       playerAdContainer.appendChild(script);
-            playerAdOverlay.classList.add('show');
+      
+      playerAdBanner.classList.add('show');
       
       setTimeout(() => {
         if (playerAdContainer.innerHTML === '' || !playerAdContainer.querySelector('iframe')) {
@@ -408,16 +493,24 @@
     }
 
     function hidePlayerAd() {
-      playerAdOverlay.classList.remove('show');
+      playerAdBanner.classList.remove('show');
       if (playerAdContainer) playerAdContainer.innerHTML = '';
     }
 
     function closePlayer() {
       playerState.active = false;
       playerOverlay.classList.remove('active');
+      
+      if (playerState._audioCheck) {
+        clearInterval(playerState._audioCheck);
+        playerState._audioCheck = null;
+      }
+      
       if (videoIframe) videoIframe.src = '';
       hidePlayerAd();
+      unmuteHelper.style.display = 'none';
       document.body.style.overflow = '';
+      
       if (window.location.hash === '#player') {
         window.history.replaceState(null, '', location.pathname);
       }
@@ -440,7 +533,9 @@
         for (let i = 0; i < bin.length; i++) res += String.fromCharCode(bin.charCodeAt(i) ^ key.charCodeAt(i % key.length));
         return res;
       } catch(e) { return ''; }
-    }    function escapeHtml(s) {
+    }
+    
+    function escapeHtml(s) {
       if (!s) return '';
       return s.replace(/[&<>]/g, m => ({ '&': '&', '<': '<', '>': '>' })[m]);
     }
@@ -489,7 +584,8 @@
         
         let thumbHtml = '<span class="thumb-placeholder"></span>';
         if (movie.cover && movie.cover.match(/^https?:\/\//)) {
-          thumbHtml = `<img class="thumb-img" src="${escapeHtml(movie.cover)}" loading="lazy" onerror="this.outerHTML='<span class=thumb-placeholder></span>'">`;        }
+          thumbHtml = `<img class="thumb-img" src="${escapeHtml(movie.cover)}" loading="lazy" onerror="this.outerHTML='<span class=thumb-placeholder></span>'">`;
+        }
         card.innerHTML = `<div class="thumb">${thumbHtml}</div><div class="movie-title">${escapeHtml(movie.title)}</div>`;
         movieGrid.appendChild(card);
         
@@ -538,7 +634,8 @@
 
         allMovies.sort(() => Math.random() - 0.5);
 
-        if (allMovies.length === 0) {          statusText.textContent = '❌ Gagal memuat data.';
+        if (allMovies.length === 0) {
+          statusText.textContent = '❌ Gagal memuat data.';
           return;
         }
 
@@ -561,32 +658,79 @@
         const numMatch = link.match(/(\d{10,})/);
         if (numMatch) videoId = numMatch[1];
       }
-      if (videoId) return `https://ok.ru/videoembed/${videoId}?autoplay=1`;
+      if (videoId) {
+        return `https://ok.ru/videoembed/${videoId}?autoplay=1&nochat=1&quality=720&volume=100`;
+      }
+      return link;
+    }
+
+    function getBackupUrl(link) {
+      let videoId = '';
+      const match = link.match(/video\/(\d+)/);
+      if (match) videoId = match[1];
+      else {
+        const numMatch = link.match(/(\d{10,})/);
+        if (numMatch) videoId = numMatch[1];
+      }
+      if (videoId) {
+        return `https://ok.ru/video/${videoId}`;
+      }
       return link;
     }
 
     function openPlayer(videoUrl) {
       playerState.active = true;
       playerState.videoUrl = videoUrl;
-      videoIframe.src = videoUrl;
+      
+      videoIframe.src = '';
+      
       playerOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
       
-      setTimeout(() => loadPlayerAd(), 200);
+      setTimeout(() => {
+        videoIframe.src = videoUrl;
+        
+        // Tampilkan tombol unmute
+        unmuteHelper.style.display = 'block';
+        unmuteHelper.textContent = '🔊 TAP UNTUK AKTIFKAN SUARA & FULLSCREEN';
+        
+        // Load banner iklan
+        loadPlayerAd();
+        
+        // Cek audio setelah beberapa detik
+        let checksDone = 0;
+        const audioCheck = setInterval(() => {
+          checksDone++;
+          
+          if (checksDone === 5) {
+            unmuteHelper.innerHTML = '⚠️ SUARA BERMASALAH?<br><small>Tap untuk buka di OK.ru</small>';
+            
+            unmuteHelper.onclick = function(e) {
+              e.preventDefault();
+              
+              if (currentMovie && currentMovie.link) {
+                const directUrl = getBackupUrl(currentMovie.link);
+                window.open(directUrl, '_blank');
+              }
+              
+              const src = videoIframe.src;
+              videoIframe.src = '';
+              setTimeout(() => { videoIframe.src = src; }, 200);
+              
+              unmuteHelper.style.display = 'none';
+            };
+          }
+        }, 1000);
+        
+        playerState._audioCheck = audioCheck;
+        
+      }, 200);
       
       if (window.history.pushState) {
         window.history.pushState({player: true}, '', '#player');
       }
-      
-      const container = document.getElementById('playerContainer');
-      if (container.requestFullscreen) {
-        container.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
-      } else if (container.webkitRequestFullscreen) {
-        container.webkitRequestFullscreen();
-      } else if (container.msRequestFullscreen) {
-        container.msRequestFullscreen();
-      }
     }
+
     function showSinopsis(movie) {
       try {
         currentMovie = movie;
@@ -636,7 +780,8 @@
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', loadAllData);
-    } else {      loadAllData();
+    } else {
+      loadAllData();
     }
   })();
 </script>
